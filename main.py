@@ -104,25 +104,24 @@ last_x,last_y = 0,0
 while not app.need_exit():
     try:
         x,y = 0,0
-        img = cam.read()
-        objs = detector.detect(img, conf_th = 0.55, iou_th = 0.6)
         FPS = "FPS:"+str(int(1/(time.time()-s_t)))
         s_t = time.time()
-        img.draw_string(220, 10, FPS, color = image.COLOR_GREEN,scale=1.7)
+        img = cam.read()
         elapsed_time = time.time() - last_send_time
+#        objs = detector.detect(img, conf_th = 0.55, iou_th = 0.6)
+        objs = img.find_blobs(thresholds=[128,255,128,255,128,255],roi=[0,0,240,240])
         if elapsed_time >= 0.020:
             comm.send_detect_result(objs)
             last_send_time = time.time()
+
         for obj in objs:
             img.draw_rect(obj.x, obj.y, obj.w, obj.h, color = image.COLOR_RED)
             msg = f'{detector.labels[obj.class_id]}: {obj.score:.2f}'
             img.draw_string(obj.x, obj.y, msg, color = image.COLOR_RED)
 
+        img.draw_string(220, 10, FPS, color = image.COLOR_GREEN,scale=1.7)
         img.draw_image(0, 0, img_back)
-        img.draw_rect(0,270, 75, 50, color = image.COLOR_RED,thickness=3)
-        img.draw_rect(245, 270, 75,50, color = image.COLOR_BLUE,thickness=3)
-        img.draw_string(22,282, '-', color = image.COLOR_GREEN,scale=2.5,thickness=2)
-        img.draw_string(268, 282, '+', color = image.COLOR_GREEN,scale=2.5,thickness=2)
+
         dis.show(img)
         x, y, preesed = ts.read()
         if is_in_button(x, y, back_rect_disp):
