@@ -101,6 +101,7 @@ comm = Comm(uart)
 last_send_time = time.time()
 s_t = time.time()
 last_x,last_y = 0,0
+thresholds = [[0,40,50,75,0,10]]
 while not app.need_exit():
 
     x,y = 0,0
@@ -109,7 +110,7 @@ while not app.need_exit():
     img = cam.read()
     elapsed_time = time.time() - last_send_time
     #objs = detector.detect(img, conf_th = 0.55, iou_th = 0.6)
-    objs = img.find_blobs(thresholds=[[0,128,0,128,0,255]],roi=[0,0,240,240])
+    objs = img.find_blobs(thresholds,roi=[0,0,320,320],merge=True)
     if elapsed_time >= 0.020:
         #comm.send_detect_result(objs)
         last_send_time = time.time()
