@@ -110,13 +110,21 @@ while not app.need_exit():
     img = cam.read()
     elapsed_time = time.time() - last_send_time
     #objs = detector.detect(img, conf_th = 0.55, iou_th = 0.6)
-    objs = img.find_blobs(thresholds,roi=[0,0,320,320],merge=True)
+    objs = [[[[]]]]
+    for i in range(5):
+        for j in range(5):
+            for k in range(5):
+                thresholds = [[i * 20, i * 20 + 20, j * 20, j * 20 + 20, k * 20, k * 20 + 20]]
+                objs[i][j][k] = img.find_blobs(thresholds,roi=[0,0,320,320],merge=True)
     if elapsed_time >= 0.020:
         #comm.send_detect_result(objs)
         last_send_time = time.time()
 
-    for obj in objs:
-        img.draw_rect(obj.x(), obj.y(), obj.w(), obj.h(), color = image.COLOR_RED)
+        for i in range(5):
+            for j in range(5):
+                for k in range(5):
+                    for obj in objs[i][j][k]:
+                        img.draw_rect(obj.x(), obj.y(), obj.w(), obj.h(), color = image.COLOR_RED)
         #msg = f'{detector.labels[obj.class_id]}: {obj.score:.2f}'
         #img.draw_string(obj.x, obj.y, msg, color = image.COLOR_RED)
 
