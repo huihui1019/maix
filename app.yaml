@@ -1,0 +1,12 @@
+id: jycszh
+name: jyjs-zh
+version: 1.4.1
+author: YU
+icon: app.png
+desc: 工训救援视觉全局定位
+files:
+  - app.png
+  - app.yaml
+  - config.ini
+  - main.py
+  - TinyFrame.py
