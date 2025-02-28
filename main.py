@@ -18,6 +18,10 @@ detector = nn.YOLOv5(model="/root/models/maixhub/172648/model_172648.mud")
 cam = camera.Camera(detector.input_width(), detector.input_height(), detector.input_format())
 cam.exposure(exposure)  #曝光时间
 cam.gain(gain)       #增益
+cam.luma(50)
+cam.constrast(50)
+cam.saturation(20)
+
 dis = display.Display()
 img_back = image.load("/maixapp/share/icon/ret.png")
 back_rect = [0, 0, 32, 32]
